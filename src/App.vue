@@ -1,27 +1,64 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div id="app">
+    <header class="app-header">
+      <h1>Mi App SNMP</h1>
+    </header>
+
+    <div class="app-body">
+      <!-- Sidebar recibe selected y emite update:selected -->
+      <AppSidebar
+        :selected="selected"
+        @update:selected="selected = $event"
+      />
+
+      <!-- MainContainer recibe selected para mostrar la vista adecuada -->
+      <MainContainer :selected="selected" />
+    </div>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+<script setup>
+import { ref } from 'vue'
+import AppSidebar   from './components/AppSidebar.vue'
+import MainContainer from './components/MainContainer.vue'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-});
+// Estado reactivo que guarda la "pantalla" actual.
+// Coincide con los `key` de tus items en AppSidebar.
+const selected = ref('home')
 </script>
 
 <style>
+:root {
+  --bg-dark: #1f1f1f;
+  --text-light: #e0e0e0;
+  --accent-green: #4caf50;
+  --bg-panel: #2c2c2c;
+  --hover-green: #357a38;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  background: var(--bg-dark);
+  color: var(--text-light);
+}
+
+.app-header {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--accent-green);
+  padding: 1rem;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
 }
 </style>
+
