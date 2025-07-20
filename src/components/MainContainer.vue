@@ -13,8 +13,8 @@ import { defineProps } from 'vue'
 // Importa todos los componentes de vista
 import HelloWorld   from './HelloWorld.vue'
 import SnmpGet      from './SnmpGet.vue'
-//import SnmpGetNext  from './SnmpGetNext.vue'
-//import SnmpSet      from './SnmpSet.vue'
+import SnmpGetNext  from './SnmpGetNext.vue'
+import SnmpSet      from './SnmpSet.vue'
 //import SnmpTraps    from './SnmpTraps.vue'
 
 // Componente para fallback si `selected` no coincide
@@ -31,8 +31,8 @@ const props = defineProps({
 const componentMap = {
   home:     HelloWorld,
   get:      SnmpGet,
-  //getNext:  SnmpGetNext,
-  //set:      SnmpSet,
+  getNext:  SnmpGetNext,
+  set:      SnmpSet,
   //traps:    SnmpTraps,
 }
 </script>
