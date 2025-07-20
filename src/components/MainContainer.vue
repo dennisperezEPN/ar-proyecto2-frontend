@@ -15,7 +15,7 @@ import HelloWorld   from './HelloWorld.vue'
 import SnmpGet      from './SnmpGet.vue'
 import SnmpGetNext  from './SnmpGetNext.vue'
 import SnmpSet      from './SnmpSet.vue'
-//import SnmpTraps    from './SnmpTraps.vue'
+import SnmpTraps    from './SnmpTraps.vue'
 
 // Componente para fallback si `selected` no coincide
 const Fallback = {
@@ -33,7 +33,7 @@ const componentMap = {
   get:      SnmpGet,
   getNext:  SnmpGetNext,
   set:      SnmpSet,
-  //traps:    SnmpTraps,
+  traps:    SnmpTraps,
 }
 </script>
 
