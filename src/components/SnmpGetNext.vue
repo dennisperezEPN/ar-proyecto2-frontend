@@ -29,43 +29,31 @@
         />
       </div>
 
-      <!-- Fuente de OID -->
+     <!-- Selector de MIB común -->
       <div class="form-group">
-        <label>Fuente de OID</label>
-        <div>
-          <label>
-            <input type="radio" value="mib" v-model="mode" />
-            MIB
-          </label>
-          <label>
-            <input type="radio" value="oid" v-model="mode" />
-            OID
-          </label>
-        </div>
-      </div>
-
-      <!-- Selección de MIB -->
-      <div class="form-group" v-if="mode === 'mib'">
-        <label for="mib">MIB</label>
-        <select id="mib" v-model="mibName">
-          <option value="SNMPv2-MIB::sysDescr.0">sysDescr</option>
-          <option value="SNMPv2-MIB::sysUpTime.0">sysUpTime</option>
-          <option value="SNMPv2-MIB::sysContact.0">sysContact</option>
-          <option value="SNMPv2-MIB::sysName.0">sysName</option>
+        <label for="mibSelect">MIB común</label>
+        <select id="mibSelect" v-model="selectedMib">
+          <option value="">— Ninguna —</option>
+          <option
+            v-for="mib in commonMibs"
+            :key="mib.name"
+            :value="mib.oid"
+          >
+            {{ mib.name }}
+          </option>
         </select>
       </div>
 
-      <!-- Entrada de OID -->
-      <div class="form-group" v-else>
+      <!-- Input para OID específico -->
+      <div class="form-group">
         <label for="oid">OID</label>
         <input
-          id="oid"
-          v-model="oid"
+          id="oids"
           type="text"
-          placeholder="1.3.6.1.2.1.1.1.0"
-          required
+          v-model="oids"
+          placeholder="Por ejemplo: 1.3.6.1.2.1.1.1.0"
         />
-      </div>
+      </div> 
 
       <!-- Botón -->
       <button type="submit" :disabled="loading">
@@ -85,43 +73,56 @@
 <script>
 import axios from 'axios';
 
+const API_URL = "http://localhost:8000"
+
 export default {
   name: 'SnmpGetNext',
   data() {
     return {
       user: '',
       ip: '',
-      mode: 'mib',      // 'mib' o 'oid'
-      mibName: 'SNMPv2-MIB::sysDescr.0',
-      oid: '',
+        commonMibs: [
+            { name: 'MIB-2',   oid: '1.3.6.1.2.1' },
+            { name: 'IF-MIB',  oid: '1.3.6.1.2.1.2' },
+            { name: 'UCDAVIS',   oid: '1.3.6.1.4.1.2021' },
+            // …otras MIBs comunes
+        ],
+      selectedMib: '',
+      oids: '',
       loading: false,
       result: null,
       error: null,
     };
   },
+    watch: {
+        selectedMib(newOid) {
+            if (newOid) {
+                this.oids = newOid
+            }
+        }
+    },
   methods: {
     async doSnmpGetNext() {
-      this.loading = true;
-      this.error = this.result = null;
+        this.loading = true
+        this.error = null
+        this.result = null
 
-      const queryOid = this.mode === 'mib'
-        ? this.mibName
-        : this.oid;
+        try {
+            const res = await axios.get(`${API_URL}/snmp/getnext`, {
+                params: {
+                    user: this.user,
+                    ip: this.ip,
+                    oid: this.oids,
+                }
+            });
 
-      try {
-        const res = await axios.get('http://127.0.0.1:8000/snmp/getnext', {
-          params: {
-            user: this.user,
-            ip: this.ip,
-            oid: queryOid,
-          }
-        });
-        this.result = JSON.stringify(res.data.snmp_next_result, null, 2);
-      } catch (e) {
-        this.error = e.response?.data?.detail || e.message;
-      } finally {
-        this.loading = false;
-      }
+            this.result = JSON.stringify(res.data.snmp_next_result, null, 2);
+        } catch (err) {
+            // si el servidor devuelve { message: '…' }
+            this.error = err.response?.data?.message || err.message
+        } finally {
+            this.loading = false
+        }
     }
   }
 };

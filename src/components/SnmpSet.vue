@@ -29,43 +29,31 @@
         />
       </div>
 
-      <!-- Fuente de OID -->
+     <!-- Selector de MIB común -->
       <div class="form-group">
-        <label>Fuente de OID</label>
-        <div>
-          <label>
-            <input type="radio" value="mib" v-model="mode" />
-            MIB
-          </label>
-          <label>
-            <input type="radio" value="oid" v-model="mode" />
-            OID
-          </label>
-        </div>
-      </div>
-
-      <!-- Selección de MIB -->
-      <div class="form-group" v-if="mode === 'mib'">
-        <label for="mib">MIB</label>
-        <select id="mib" v-model="mibName">
-          <option value="SNMPv2-MIB::sysDescr.0">sysDescr</option>
-          <option value="SNMPv2-MIB::sysUpTime.0">sysUpTime</option>
-          <option value="SNMPv2-MIB::sysContact.0">sysContact</option>
-          <option value="SNMPv2-MIB::sysName.0">sysName</option>
+        <label for="mibSelect">MIB común</label>
+        <select id="mibSelect" v-model="selectedMib">
+          <option value="">— Ninguna —</option>
+          <option
+            v-for="mib in commonMibs"
+            :key="mib.name"
+            :value="mib.oid"
+          >
+            {{ mib.name }}
+          </option>
         </select>
       </div>
 
-      <!-- Entrada de OID -->
-      <div class="form-group" v-else>
+      <!-- Input para OID específico -->
+      <div class="form-group">
         <label for="oid">OID</label>
         <input
           id="oid"
           v-model="oid"
           type="text"
-          placeholder="1.3.6.1.2.1.1.5.0"
-          required
+          placeholder="Por ejemplo: 1.3.6.1.2.1.1.5.0"
         />
-      </div>
+      </div> 
 
       <!-- Tipo de dato -->
       <div class="form-group">
@@ -112,22 +100,34 @@
 <script>
 import axios from 'axios';
 
+const API_URL = "http://localhost:8000"
+
 export default {
   name: 'SnmpSet',
   data() {
     return {
-      user: '',
-      ip: '',
-      mode: 'mib',
-      mibName: 'SNMPv2-MIB::sysContact.0',
-      oid: '',
-      type: 'OctetString',
-      value: '',
-      loading: false,
-      result: null,
-      error: null,
+        ip: '',
+        commonMibs: [
+            { name: 'MIB-2',   oid: '1.3.6.1.2.1' },
+            { name: 'IF-MIB',  oid: '1.3.6.1.2.1.2' },
+            { name: 'UCDAVIS',   oid: '1.3.6.1.4.1.2021' },
+            // …otras MIBs comunes
+        ],
+        selectedMib: '',
+        oid: '',
+        type: 'OctetString',
+        value: '',
+        loading: false,
+        result: null,
+        error: null, 
     };
   },
+    watch: {
+        // Cuando seleccionas una MIB, se rellena automáticamente el OID
+        selectedMib(newOid) {
+            if (newOid) this.oid = newOid;
+        },
+    },
   computed: {
     isNumericType() {
       return ['Integer','Counter32','Gauge32','TimeTicks','Counter64']
@@ -139,17 +139,13 @@ export default {
       this.loading = true;
       this.error = this.result = null;
 
-      const queryOid = this.mode === 'mib'
-        ? this.mibName
-        : this.oid;
-
       try {
         const res = await axios.post(
-          'http://127.0.0.1:8000/snmp/set',
+            `${API_URL}/snmp/set`,
           {
             user: this.user,
             ip: this.ip,
-            oid: queryOid,
+            oid: this.oid,
             value: this.value,
             type: this.type,
           }
