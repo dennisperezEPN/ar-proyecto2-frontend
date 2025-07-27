@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header class="app-header">
-      <h1>Mi App SNMP</h1>
+      <h1> Network Management System</h1>
     </header>
 
     <div class="app-body">
@@ -28,12 +28,15 @@ const selected = ref('home')
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
   --bg-dark: #1f1f1f;
   --text-light: #e0e0e0;
   --accent-green: #4caf50;
   --bg-panel: #2c2c2c;
   --hover-green: #357a38;
+  --font-family: 'Inter', sans-serif;
 }
 
 #app {
@@ -43,6 +46,7 @@ const selected = ref('home')
   margin: 0;
   background: var(--bg-dark);
   color: var(--text-light);
+  font-family: var(--font-family);
 }
 
 .app-header {
