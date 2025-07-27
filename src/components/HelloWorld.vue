@@ -1,61 +1,120 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+  <div class="welcome">
+    <h1>Proyecto II - Administración de Redes</h1>
+    <p class="tagline">
+      Una interfaz sencilla y moderna para gestionar dispositivos SNMPv3
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+
+    <section class="intro">
+      <h2>¿De qué trata este proyecto?</h2>
+      <p>
+        Este proyecto es una aplicación frontend construida con Vue.js que se conecta a un backend FastAPI
+        para realizar operaciones SNMPv3 (GET, GETNEXT, SET y TRAPS) con soporte completo de
+        autenticación y privacidad. Su objetivo es simplificar el monitoreo y configuración
+        de equipos de red sin tener que escribir directamente scripts en Python o usar CLI.
+      </p>
+    </section>
+
+    <section class="features">
+      <h2>Características principales</h2>
+      <ul>
+        <li>Operaciones SNMPv3: <strong>GET</strong>, <strong>GETNEXT</strong>, <strong>SET</strong> y <strong>TRAPS</strong>.</li>
+        <li>Soporte de niveles de seguridad: <em>noAuthNoPriv</em>, <em>authNoPriv</em> y <em>authPriv</em>.</li>
+        <li>Selección de MIBs comunes y edición de OIDs manual.</li>
+        <li>Validación de formularios y feedback en tiempo real.</li>
+      </ul>
+    </section>
+
+    <section class="getting-started">
+      <h2>Cómo empezar</h2>
+      <ol>
+        <li>Clona el repositorio:<br /><code>git clone https://github.com/tu-usuario/snmp-manager-ui.git</code></li>
+        <li>Instala dependencias:<br /><code>npm install</code> o <code>yarn install</code></li>
+        <li>Levanta el servidor backend:<br /><code>uvicorn main:app --reload</code></li>
+        <li>Arranca la interfaz:<br /><code>npm run serve</code> o <code>yarn serve</code></li>
+        <li>Abre <code>http://localhost:8080</code> en tu navegador</li>
+      </ol>
+    </section>
+
+    <section class="links">
+      <h2>Enlaces útiles</h2>
+      <ul>
+        <li><a href="https://github.com/tu-usuario/snmp-manager-ui" target="_blank">Repositorio en GitHub</a></li>
+        <li><a href="https://pysnmp.readthedocs.io/" target="_blank">Documentación de PySNMP</a></li>
+        <li><a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI</a></li>
+      </ul>
+    </section>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
+<script>
+export default {
   name: 'HelloWorld',
-  props: {
-    msg: String,
-  },
-});
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.welcome {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--bg-panel);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.welcome h1 {
+  margin-bottom: 0.5rem;
+  color: var(--accent-green);
+  text-align: center;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.welcome .tagline {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+  font-style: italic;
 }
-a {
-  color: #42b983;
+
+.welcome section {
+  margin-bottom: 1.5rem;
+}
+
+.welcome h2 {
+  color: var(--accent-green);
+  margin-bottom: 0.75rem;
+}
+
+.welcome p {
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.welcome ul, .welcome ol {
+  padding-left: 1.25rem;
+  color: var(--text-light);
+}
+
+.welcome ul li, .welcome ol li {
+  margin-bottom: 0.5rem;
+}
+
+.welcome code {
+  background: #343434;
+  color: #bada55;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.welcome a {
+  color: var(--accent-green);
+  text-decoration: none;
+}
+
+.welcome a:hover {
+  color: var(--hover-green);
+  text-decoration: underline;
 }
 </style>
+
