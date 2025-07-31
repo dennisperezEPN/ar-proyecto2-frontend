@@ -8,8 +8,9 @@
         :key="idx"
         class="trap-item"
       >
-        <strong>{{ trap.timestamp }}</strong>
-        <span v-if="trap.source">– desde {{ trap.source }}</span>
+        <div><strong>{{ trap.timestamp }}</strong></div>
+        <span v-if="trap.type"> Se ha recibido una trap de tipo {{ trap.type }}</span>
+        <span v-if="trap.source"> – desde {{ trap.source }}</span>
         <ul>
           <li
             v-for="(vb, i2) in trap.varBinds"
@@ -28,6 +29,18 @@ import { ref, onMounted } from 'vue'
 
 const traps = ref([])
 
+// Diccionario OID → nombre de trap
+const TRAP_TYPES = {
+  '1.3.6.1.6.3.1.1.5.1':   'coldStart',
+  '1.3.6.1.6.3.1.1.5.2':   'warmStart',
+  '1.3.6.1.6.3.1.1.5.3':   'linkDown',
+  '1.3.6.1.6.3.1.1.5.4':   'linkUp',
+  '1.3.6.1.6.3.1.1.5.5':   'nsNotifyShutdown',
+  '1.3.6.1.6.3.1.1.5.6':   'egpNeighborLoss',
+  '1.3.6.1.6.3.1.1.5.7':   'enterpriseSpecific',
+  // …
+}
+
 onMounted(() => {
   // Ajusta la URL si tu backend corre en otra dirección o puerto:
   const url = 'http://localhost:8000/traps/stream'
@@ -36,6 +49,21 @@ onMounted(() => {
   es.onmessage = evt => {
     const data = JSON.parse(evt.data)
     data.timestamp = new Date().toLocaleString()
+
+    // 2. Formatear source (si viene separado)
+    if (data.source_ip && data.source_port) {
+      data.source = `${data.source_ip}:${data.source_port}`
+    }
+
+    // 3. Extraer el valor de snmpTrapOID.0
+    const trapOidVar = data.varBinds.find(vb =>
+      vb.oid === '1.3.6.1.6.3.1.1.4.1.0'
+    )
+    const trapOidVal = trapOidVar?.value
+
+    // 4. Mapear al nombre legible
+    data.type = TRAP_TYPES[trapOidVal] || 'unknownTrap'
+
     traps.value.unshift(data)
   }
 
