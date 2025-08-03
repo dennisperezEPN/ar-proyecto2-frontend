@@ -277,5 +277,15 @@ export default {
   color: #f44336;
   margin-top: 1rem;
 }
+.result pre {
+  background: transparent;
+  color: #bada55;
+  font-family: monospace;
+  white-space: pre-wrap;     /* permite saltos de línea si es necesario */
+  word-break: break-all;     /* corta palabras largas si no caben */
+  overflow-x: auto;          /* permite scroll horizontal si es necesario */
+  max-width: 100%;           /* no se sale del div */
+}
+
 </style>
 

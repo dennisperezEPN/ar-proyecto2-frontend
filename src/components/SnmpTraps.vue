@@ -36,8 +36,8 @@ const TRAP_TYPES = {
   '1.3.6.1.6.3.1.1.5.3':   'linkDown',
   '1.3.6.1.6.3.1.1.5.4':   'linkUp',
   '1.3.6.1.6.3.1.1.5.5':   'nsNotifyShutdown',
-  '1.3.6.1.6.3.1.1.5.6':   'egpNeighborLoss',
-  '1.3.6.1.6.3.1.1.5.7':   'enterpriseSpecific',
+  '1.3.6.1.4.1.8072.4.0.2':   'nsNotifyShutdown',
+  //'1.3.6.1.4.1.9.0.0':     '"Reinicio de Router (reload)"',
   // …
 }
 

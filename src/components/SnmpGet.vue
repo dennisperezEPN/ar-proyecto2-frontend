@@ -284,6 +284,10 @@ button:disabled {
   background: transparent;
   color: #bada55;               /* tono lima para destacar valores */
   font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .error {
